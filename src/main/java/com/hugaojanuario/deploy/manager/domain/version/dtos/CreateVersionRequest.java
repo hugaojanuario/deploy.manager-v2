@@ -1,4 +1,6 @@
 package com.hugaojanuario.deploy.manager.domain.version.dtos;
 
-public class CreateVersionRequest {
+import java.time.LocalDate;
+
+public record CreateVersionRequest (LocalDate dateRelease, String numberVersion, String changelog) {
 }
