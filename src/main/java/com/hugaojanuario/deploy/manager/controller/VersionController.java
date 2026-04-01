@@ -3,7 +3,6 @@ package com.hugaojanuario.deploy.manager.controller;
 import com.hugaojanuario.deploy.manager.domain.version.dtos.CreateVersionRequest;
 import com.hugaojanuario.deploy.manager.domain.version.dtos.UpdateVersionRequest;
 import com.hugaojanuario.deploy.manager.service.VersionService;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -20,7 +19,7 @@ public class VersionController {
     private final VersionService versionService;
 
     @PostMapping
-    public ResponseEntity createVersion(@RequestBody @Valid CreateVersionRequest request, UriComponentsBuilder uriComponentsBuilder){
+    public ResponseEntity createVersion(@RequestBody CreateVersionRequest request, UriComponentsBuilder uriComponentsBuilder){
 
         var newVersion = versionService.createVersion(request);
         var uri = uriComponentsBuilder.path("/deploy/version/{id}").buildAndExpand(newVersion.id()).toUri();
@@ -43,7 +42,7 @@ public class VersionController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity updateVersion(@PathVariable UUID id, @Valid @RequestBody UpdateVersionRequest request){
+    public ResponseEntity updateVersion(@PathVariable UUID id, @RequestBody UpdateVersionRequest request){
         var updated = versionService.updateVersion(id, request);
 
         return ResponseEntity.ok(updated);

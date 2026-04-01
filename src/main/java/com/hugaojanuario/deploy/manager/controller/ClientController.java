@@ -3,7 +3,6 @@ package com.hugaojanuario.deploy.manager.controller;
 import com.hugaojanuario.deploy.manager.domain.client.dtos.CreateClientRequest;
 import com.hugaojanuario.deploy.manager.domain.client.dtos.UpdateClientRequest;
 import com.hugaojanuario.deploy.manager.service.ClientService;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +19,7 @@ public class ClientController {
     private final ClientService clientService;
 
     @PostMapping
-    public ResponseEntity createClient (@RequestBody @Valid CreateClientRequest request, UriComponentsBuilder uriComponentsBuilder){
+    public ResponseEntity createClient (@RequestBody CreateClientRequest request, UriComponentsBuilder uriComponentsBuilder){
 
         var newClient = clientService.createClient(request);
         var uri = uriComponentsBuilder.path("/deploy/client/{id}").buildAndExpand(newClient.id()).toUri();
@@ -43,7 +42,7 @@ public class ClientController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity updateClient(@PathVariable UUID id, @Valid @RequestBody UpdateClientRequest request){
+    public ResponseEntity updateClient(@PathVariable UUID id, @RequestBody UpdateClientRequest request){
         var updated = clientService.updateClient(id, request);
 
         return ResponseEntity.ok(updated);

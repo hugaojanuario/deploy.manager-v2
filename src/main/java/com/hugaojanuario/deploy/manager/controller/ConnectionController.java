@@ -3,7 +3,6 @@ package com.hugaojanuario.deploy.manager.controller;
 import com.hugaojanuario.deploy.manager.domain.connection.dtos.CreateConnectionRequest;
 import com.hugaojanuario.deploy.manager.domain.connection.dtos.UpdateConnectionRequest;
 import com.hugaojanuario.deploy.manager.service.ConnectionService;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -20,7 +19,7 @@ public class ConnectionController {
     private final ConnectionService connectionService;
 
     @PostMapping
-    public ResponseEntity createConnection(@RequestBody @Valid CreateConnectionRequest request, UriComponentsBuilder uriComponentsBuilder){
+    public ResponseEntity createConnection(@RequestBody CreateConnectionRequest request, UriComponentsBuilder uriComponentsBuilder){
 
         var newConnection = connectionService.createConnection(request);
         var uri = uriComponentsBuilder.path("/deploy/connection/{id}").buildAndExpand(newConnection.id()).toUri();
@@ -43,7 +42,7 @@ public class ConnectionController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity updateConnection(@PathVariable UUID id, @Valid @RequestBody UpdateConnectionRequest request){
+    public ResponseEntity updateConnection(@PathVariable UUID id, @RequestBody UpdateConnectionRequest request){
         var updated = connectionService.updateConnection(id, request);
 
         return ResponseEntity.ok(updated);
