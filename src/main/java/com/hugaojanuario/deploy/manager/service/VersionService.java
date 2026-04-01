@@ -31,19 +31,19 @@ public class VersionService {
         return new VersionResponse(saved);
     }
 
-    private Page <VersionResponse> findAllVersions(Pageable pageable){
+    public Page <VersionResponse> findAllVersions(Pageable pageable){
         return versionRepository.findByActivateTrue(pageable).map(VersionResponse::new);
 
     }
 
-    private VersionResponse findVersionById(UUID id){
+    public VersionResponse findVersionById(UUID id){
         Version version = versionRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException());
 
         return new VersionResponse(version);
     }
 
-    private VersionResponse updateVersion(UUID id, UpdateVersionRequest request){
+    public VersionResponse updateVersion(UUID id, UpdateVersionRequest request){
         Version version = versionRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException());
 
@@ -56,7 +56,7 @@ public class VersionService {
         return new VersionResponse(updated);
     }
 
-    private void softDeleteVersion(UUID id){
+    public void softDeleteVersion(UUID id){
         Version version = versionRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException());
 
