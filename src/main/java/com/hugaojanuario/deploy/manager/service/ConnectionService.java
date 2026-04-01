@@ -22,7 +22,7 @@ public class ConnectionService {
     private final ClientRepository clientRepository;
 
     public ConnectionResponse createConnection(CreateConnectionRequest request){
-        Client client = clientRepository.findById(request.client().getId())
+        Client client = clientRepository.findById(request.clientId())
                 .orElseThrow(() -> new RuntimeException());
 
         Connection connection = new Connection();

@@ -1,0 +1,37 @@
+@baseUrl = http://localhost:8080
+@versionId =
+
+### Criar versão
+POST {{baseUrl}}/deploy/version
+Content-Type: application/json<
+
+{
+  "dateRelease": "2026-04-01",
+  "numberVersion": "1.0.0",
+  "changelog": "Primeira versão do sistema"
+}
+
+###
+
+### Listar versões (paginado)
+GET {{baseUrl}}/deploy/version?page=0&size=5
+
+###
+
+### Buscar versão por ID
+GET {{baseUrl}}/deploy/version/{{versionId}}
+
+###
+
+### Atualizar versão (só changelog)
+PUT {{baseUrl}}/deploy/version/{{versionId}}
+Content-Type: application/json
+
+{
+  "changelog": "Correções e melhorias na versão"
+}
+
+###
+
+### Deletar versão (soft delete)
+DELETE {{baseUrl}}/deploy/version/{{versionId}}

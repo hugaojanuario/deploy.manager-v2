@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 public record ConnectionResponse (UUID id,
-                                  Client client,
+                                  UUID clientId,
                                   String userMachine,
                                   String passwordMachine,
                                   String userDb,
@@ -19,7 +19,7 @@ public record ConnectionResponse (UUID id,
                                   LocalDateTime createdAt){
     public ConnectionResponse(Connection connection){
         this(connection.getId(),
-                connection.getClient(),
+                connection.getClient().getId(),
                 connection.getUserMachine(),
                 connection.getPasswordMachine(),
                 connection.getUserDb(),
