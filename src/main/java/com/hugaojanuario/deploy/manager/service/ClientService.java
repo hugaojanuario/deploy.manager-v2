@@ -4,7 +4,6 @@ import com.hugaojanuario.deploy.manager.domain.client.Client;
 import com.hugaojanuario.deploy.manager.domain.client.dtos.ClientResponse;
 import com.hugaojanuario.deploy.manager.domain.client.dtos.CreateClientRequest;
 import com.hugaojanuario.deploy.manager.domain.client.dtos.UpdateClientRequest;
-import com.hugaojanuario.deploy.manager.domain.user.dtos.UpdateUserRequest;
 import com.hugaojanuario.deploy.manager.domain.version.Version;
 import com.hugaojanuario.deploy.manager.repository.ClientRepository;
 import com.hugaojanuario.deploy.manager.repository.VersionRepository;
@@ -72,7 +71,6 @@ public class ClientService {
         return new ClientResponse(updated);
     }
 
-    @Transactional
     public void softDeleteClient(UUID id){
         Client client = clientRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException());

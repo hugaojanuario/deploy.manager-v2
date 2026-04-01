@@ -6,8 +6,16 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-public record VersionResponse(UUID id, LocalDate dateRelease, String numberVersion, String changelog, LocalDateTime createdAt) {
+public record VersionResponse(UUID id,
+                              LocalDate dateRelease,
+                              String numberVersion,
+                              String changelog,
+                              LocalDateTime createdAt) {
     public VersionResponse(Version version){
-        this(version.getId(), version.getDateRelease(), version.getNumberVersion(), version.getChangelog(), version.getCreatedAt());
+        this(version.getId(),
+                version.getDateRelease(),
+                version.getNumberVersion(),
+                version.getChangelog(),
+                version.getCreatedAt());
     }
 }
