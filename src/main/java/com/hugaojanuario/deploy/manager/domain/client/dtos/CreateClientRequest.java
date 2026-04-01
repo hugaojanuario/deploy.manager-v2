@@ -1,6 +1,6 @@
 package com.hugaojanuario.deploy.manager.domain.client.dtos;
 
-import jakarta.validation.constraints.Email;
+
 
 import java.util.UUID;
 

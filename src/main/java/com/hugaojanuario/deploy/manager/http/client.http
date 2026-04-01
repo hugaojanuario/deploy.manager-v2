@@ -1,0 +1,41 @@
+@baseUrl = http://localhost:8080
+@clientId =
+@versionId =
+
+### Criar cliente
+POST {{baseUrl}}/deploy/client
+Content-Type: application/json
+
+{
+  "versionId": "{{versionId}}",
+  "name": "Empresa XPTO",
+  "city": "São Paulo",
+  "state": "SP",
+  "contact": "11999999999"
+}
+
+###
+
+### Listar clientes (paginado)
+GET {{baseUrl}}/deploy/client?page=0&size=5
+
+###
+
+### Buscar cliente por ID
+GET {{baseUrl}}/deploy/client/{{clientId}}
+
+###
+
+### Atualizar cliente
+PUT {{baseUrl}}/deploy/client/{{clientId}}
+Content-Type: application/json
+
+{
+  "versionId": "{{versionId}}",
+  "contact": "11888888888"
+}
+
+###
+
+### Deletar cliente
+DELETE {{baseUrl}}/deploy/client/{{clientId}}

@@ -1,0 +1,49 @@
+@baseUrl = http://localhost:8080
+@connectionId =
+@clientId =
+
+### Criar conexão
+POST {{baseUrl}}/deploy/connection
+Content-Type: application/json
+
+{
+  "clientId": "{{clientId}}",
+  "userMachine": "admin",
+  "passwordMachine": "123456",
+  "userDb": "postgres",
+  "passwordDb": "postgres",
+  "idRemoteConnection": "remote-001",
+  "passwordRemoteConnection": "remote-pass",
+  "connectionType": "SSH"
+}
+
+###
+
+### Listar conexões (paginado)
+GET {{baseUrl}}/deploy/connection?page=0&size=5
+
+###
+
+### Buscar conexão por ID
+GET {{baseUrl}}/deploy/connection/{{connectionId}}
+
+###
+
+### Atualizar conexão
+PUT {{baseUrl}}/deploy/connection/{{connectionId}}
+Content-Type: application/json
+
+{
+  "userMachine": "admin_updated",
+  "passwordMachine": "123456",
+  "userDb": "postgres",
+  "passwordDb": "postgres",
+  "idRemoteConnection": "remote-002",
+  "passwordRemoteConnection": "remote-pass-updated",
+  "connectionType": "SSH"
+}
+
+###
+
+### Deletar conexão
+DELETE {{baseUrl}}/deploy/connection/{{connectionId}}
