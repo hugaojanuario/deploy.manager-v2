@@ -1,7 +1,6 @@
 package com.hugaojanuario.deploy.manager.service;
 
 import com.hugaojanuario.deploy.manager.domain.client.Client;
-import com.hugaojanuario.deploy.manager.domain.client.dtos.UpdateClientRequest;
 import com.hugaojanuario.deploy.manager.domain.connection.Connection;
 import com.hugaojanuario.deploy.manager.domain.connection.dtos.ConnectionResponse;
 import com.hugaojanuario.deploy.manager.domain.connection.dtos.CreateConnectionRequest;
