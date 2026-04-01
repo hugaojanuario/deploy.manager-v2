@@ -1,5 +1,6 @@
 package com.hugaojanuario.deploy.manager.domain.connection.dtos;
 
+import com.hugaojanuario.deploy.manager.domain.client.Client;
 import com.hugaojanuario.deploy.manager.domain.connection.Connection;
 import com.hugaojanuario.deploy.manager.domain.connection.enums.ConnectionType;
 
@@ -7,6 +8,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 public record ConnectionResponse (UUID id,
+                                  Client client,
                                   String userMachine,
                                   String passwordMachine,
                                   String userDb,
@@ -17,6 +19,7 @@ public record ConnectionResponse (UUID id,
                                   LocalDateTime createdAt){
     public ConnectionResponse(Connection connection){
         this(connection.getId(),
+                connection.getClient(),
                 connection.getUserMachine(),
                 connection.getPasswordMachine(),
                 connection.getUserDb(),

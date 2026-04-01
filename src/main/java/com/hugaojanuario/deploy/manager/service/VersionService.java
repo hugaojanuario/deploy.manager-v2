@@ -1,6 +1,5 @@
 package com.hugaojanuario.deploy.manager.service;
 
-import com.hugaojanuario.deploy.manager.domain.client.Client;
 import com.hugaojanuario.deploy.manager.domain.version.Version;
 import com.hugaojanuario.deploy.manager.domain.version.dtos.CreateVersionRequest;
 import com.hugaojanuario.deploy.manager.domain.version.dtos.UpdateVersionRequest;
