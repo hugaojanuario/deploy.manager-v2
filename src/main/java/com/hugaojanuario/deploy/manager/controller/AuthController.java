@@ -2,7 +2,9 @@ package com.hugaojanuario.deploy.manager.controller;
 
 import com.hugaojanuario.deploy.manager.domain.user.User;
 import com.hugaojanuario.deploy.manager.domain.user.dtos.AuthDto;
+import com.hugaojanuario.deploy.manager.domain.user.dtos.AuthResponse;
 import com.hugaojanuario.deploy.manager.domain.user.dtos.CreateUserRequest;
+import com.hugaojanuario.deploy.manager.infra.security.TokenService;
 import com.hugaojanuario.deploy.manager.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -23,12 +25,16 @@ public class AuthController {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private TokenService tokenService;
+
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody AuthDto authDto){
         var userNamePassword = new UsernamePasswordAuthenticationToken(authDto.email(), authDto.password());
         var auth = this.authenticationManager.authenticate(userNamePassword);
+        var token = tokenService.generatedToken((User)auth.getPrincipal());
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(new AuthResponse(token));
     }
 
     @PostMapping("/register")

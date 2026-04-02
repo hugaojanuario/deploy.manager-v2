@@ -1,7 +1,6 @@
 package com.hugaojanuario.deploy.manager.service;
 
 import com.hugaojanuario.deploy.manager.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
