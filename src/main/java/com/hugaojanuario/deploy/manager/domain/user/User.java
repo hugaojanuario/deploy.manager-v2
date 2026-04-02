@@ -28,7 +28,6 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    private String name;
     private String email;
     private String password;
     private UserType userType;
@@ -38,6 +37,12 @@ public class User implements UserDetails {
     private LocalDateTime createdAt;
 
     private boolean activate;
+
+    public User(String email, String password, UserType userType){
+        this.email = email;
+        this.password = password;
+        this.userType = userType;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
