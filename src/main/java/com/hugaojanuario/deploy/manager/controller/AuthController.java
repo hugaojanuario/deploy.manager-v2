@@ -6,6 +6,8 @@ import com.hugaojanuario.deploy.manager.domain.user.dtos.AuthResponse;
 import com.hugaojanuario.deploy.manager.domain.user.dtos.CreateUserRequest;
 import com.hugaojanuario.deploy.manager.infra.security.TokenService;
 import com.hugaojanuario.deploy.manager.repository.UserRepository;
+import com.hugaojanuario.deploy.manager.service.AuthService;
+
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -23,8 +25,9 @@ public class AuthController {
 
     @Autowired
     private AuthenticationManager authenticationManager;
+    
     @Autowired
-    private UserRepository userRepository;
+    private AuthService authService;
 
     @Autowired
     private TokenService tokenService;
@@ -40,15 +43,9 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity register (@RequestBody @Valid CreateUserRequest request){
-        if (this.userRepository.findByEmail(request.email()) != null) return ResponseEntity.badRequest().build();
+        var newUser = authService.register(request);
 
-        String encryptPassword = new BCryptPasswordEncoder().encode(request.password());
-        User newUser = new User(request.email(), encryptPassword, request.userType());
-        newUser.setActivate(true);
-
-        this.userRepository.save(newUser);
-
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok().body(newUser);
     }
 
 }

@@ -9,13 +9,11 @@ import java.util.UUID;
 
 public record UserResponse(UUID id,
                            String email,
-                           String password,
                            UserType userType,
                            LocalDateTime createdAt) {
     public UserResponse( User user){
         this(user.getId(),
                 user.getEmail(),
-                user.getPassword(),
                 user.getUserType(),
                 user.getCreatedAt());
     }
