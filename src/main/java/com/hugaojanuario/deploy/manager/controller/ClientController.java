@@ -41,6 +41,13 @@ public class ClientController {
         return ResponseEntity.ok(findByid);
     }
 
+    @GetMapping("/search")
+    public ResponseEntity findClientByName(@RequestParam String name){
+        var findByName = clientService.findClientByName(name);
+
+        return ResponseEntity.ok(findByName);
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity updateClient(@PathVariable UUID id, @RequestBody UpdateClientRequest request){
         var updated = clientService.updateClient(id, request);

@@ -51,13 +51,20 @@ public class ClientService {
         return new ClientResponse(client);
     }
 
+    public ClientResponse findClientByName(String name){
+        Client client = clientRepository.findByName(name)
+                .orElseThrow(() -> new RuntimeException());
+
+        return new ClientResponse(client);
+    }
+
     @Transactional
     public ClientResponse updateClient (UUID id, UpdateClientRequest request){
         Client client = clientRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException());
 
         if (request.versionId() != null){
-            Version version = versionRepository.findById(id)
+            Version version = versionRepository.findById(client.getActualVersion().getId())
                     .orElseThrow(() -> new RuntimeException("Version not found . . ."));
             client.setActualVersion(version);
         }

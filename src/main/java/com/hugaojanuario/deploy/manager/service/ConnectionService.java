@@ -57,7 +57,7 @@ public class ConnectionService {
                 .orElseThrow(() -> new RuntimeException());
 
         if(request.userMachine() != null){
-            connection.setUserDb(request.userDb());
+            connection.setUserMachine(request.userMachine());
         }
         if(request.passwordMachine() != null){
             connection.setPasswordMachine(request.passwordMachine());
