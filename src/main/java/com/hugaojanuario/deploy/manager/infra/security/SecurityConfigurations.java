@@ -33,7 +33,18 @@ public class SecurityConfigurations {
                         .requestMatchers("/v3/api-docs/**").permitAll()
                         .requestMatchers("/swagger-resources/**").permitAll()
                         .requestMatchers("/webjars/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/user").hasRole("ADMIN")
+                        //POST
+                        .requestMatchers(HttpMethod.POST, "/deploy/version").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/deploy/connection").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/deploy/client").hasRole("ADMIN")
+                        //PUT
+                        .requestMatchers(HttpMethod.PUT, "/deploy/version/{id}").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/deploy/connection/{id}").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/deploy/client/{id}").hasRole("ADMIN")
+                        //DELETE
+                        .requestMatchers(HttpMethod.DELETE, "/deploy/version/{id}").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/deploy/connection/{id}").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/deploy/client/{id}").hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
