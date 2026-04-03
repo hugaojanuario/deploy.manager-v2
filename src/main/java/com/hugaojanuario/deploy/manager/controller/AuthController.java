@@ -6,6 +6,7 @@ import com.hugaojanuario.deploy.manager.domain.user.dtos.AuthResponse;
 import com.hugaojanuario.deploy.manager.domain.user.dtos.CreateUserRequest;
 import com.hugaojanuario.deploy.manager.infra.security.TokenService;
 import com.hugaojanuario.deploy.manager.repository.UserRepository;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -38,7 +39,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity register (@RequestBody CreateUserRequest request){
+    public ResponseEntity register (@RequestBody @Valid CreateUserRequest request){
         if (this.userRepository.findByEmail(request.email()) != null) return ResponseEntity.badRequest().build();
 
         String encryptPassword = new BCryptPasswordEncoder().encode(request.password());
