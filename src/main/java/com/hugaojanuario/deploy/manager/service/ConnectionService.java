@@ -10,7 +10,9 @@ import com.hugaojanuario.deploy.manager.repository.ConnectionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.UUID;
 
@@ -23,7 +25,7 @@ public class ConnectionService {
 
     public ConnectionResponse createConnection(CreateConnectionRequest request){
         Client client = clientRepository.findById(request.clientId())
-                .orElseThrow(() -> new RuntimeException());
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Client not found"));
 
         Connection connection = new Connection();
         connection.setActivate(true);
@@ -47,14 +49,14 @@ public class ConnectionService {
 
     public ConnectionResponse findConnectionById(UUID id){
         Connection connection = connectionRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException());
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Connection not found"));
 
         return new ConnectionResponse(connection);
     }
 
     public ConnectionResponse updateConnection(UUID id, UpdateConnectionRequest request){
         Connection connection = connectionRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException());
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Connection not found"));
 
         if(request.userMachine() != null){
             connection.setUserMachine(request.userMachine());
@@ -85,7 +87,7 @@ public class ConnectionService {
 
     public void softDeleteConnection(UUID id){
         Connection connection = connectionRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException());
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Connection not found"));
 
         connection.setActivate(false);
 

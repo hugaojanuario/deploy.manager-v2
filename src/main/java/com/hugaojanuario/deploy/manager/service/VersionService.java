@@ -8,7 +8,9 @@ import com.hugaojanuario.deploy.manager.repository.VersionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.UUID;
 
@@ -38,14 +40,14 @@ public class VersionService {
 
     public VersionResponse findVersionById(UUID id){
         Version version = versionRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException());
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Version not found"));
 
         return new VersionResponse(version);
     }
 
     public VersionResponse updateVersion(UUID id, UpdateVersionRequest request){
         Version version = versionRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException());
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Version not found"));
 
         if (request.changelog() != null){
             version.setChangelog(request.changelog());
@@ -58,7 +60,7 @@ public class VersionService {
 
     public void softDeleteVersion(UUID id){
         Version version = versionRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException());
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Version not found"));
 
         version.setActivate(false);
         versionRepository.save(version);

@@ -8,12 +8,13 @@ import com.hugaojanuario.deploy.manager.repository.UserRepository;
 import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class AuthService implements UserDetailsService {
@@ -27,7 +28,8 @@ public class AuthService implements UserDetailsService {
     }
 
     public AuthRegisterResponse register (@Valid CreateUserRequest request){
-        if (this.userRepository.findByEmail(request.email()) != null) return null;
+        if (this.userRepository.findByEmail(request.email()) != null)
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Email already registered");
 
         String encryptPassword = new BCryptPasswordEncoder().encode(request.password());
         User newUser = new User(request.email(), encryptPassword, request.userType());

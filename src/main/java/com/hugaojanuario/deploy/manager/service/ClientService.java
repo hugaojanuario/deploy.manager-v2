@@ -11,8 +11,11 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -25,7 +28,7 @@ public class ClientService {
     @Transactional
     public ClientResponse createClient(CreateClientRequest request){
         Version version = versionRepository.findById(request.versionId())
-                .orElseThrow(() -> new RuntimeException());
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Version not found"));
 
         Client client = new Client();
         client.setActivate(true);
@@ -46,26 +49,26 @@ public class ClientService {
 
     public ClientResponse findClientById (UUID id){
         Client client = clientRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException());
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Client not found"));
 
         return new ClientResponse(client);
     }
 
-    public ClientResponse findClientByName(String name){
-        Client client = clientRepository.findByName(name)
-                .orElseThrow(() -> new RuntimeException());
-
-        return new ClientResponse(client);
+    public List<ClientResponse> findClientByName(String name){
+        return clientRepository.findByNameContainingIgnoreCase(name)
+                .stream()
+                .map(ClientResponse::new)
+                .toList();
     }
 
     @Transactional
     public ClientResponse updateClient (UUID id, UpdateClientRequest request){
         Client client = clientRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException());
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Client not found"));
 
         if (request.versionId() != null){
-            Version version = versionRepository.findById(client.getActualVersion().getId())
-                    .orElseThrow(() -> new RuntimeException("Version not found . . ."));
+            Version version = versionRepository.findById(request.versionId())
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Version not found"));
             client.setActualVersion(version);
         }
 
@@ -80,7 +83,7 @@ public class ClientService {
 
     public void softDeleteClient(UUID id){
         Client client = clientRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException());
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Client not found"));
 
         client.setActivate(false);
         clientRepository.save(client);
