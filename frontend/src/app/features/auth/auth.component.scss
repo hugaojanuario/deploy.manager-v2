@@ -43,6 +43,12 @@
   &__footer {
     font-size: 12px;
     opacity: 0.6;
+
+    a {
+      color: inherit;
+      text-decoration: underline;
+      &:hover { opacity: 0.8; }
+    }
   }
 }
 
