@@ -1,0 +1,92 @@
+<div class="auth-container">
+
+  <!-- Lado Esquerdo -->
+  <div class="auth-left">
+    <div class="auth-left__logo">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+      </svg>
+      <span>Deploy Manager</span>
+    </div>
+
+    <div class="auth-left__content">
+      <h1>Gerencie seus deploys com eficiência</h1>
+      <p>Controle completo sobre suas aplicações e ambientes de deploy em uma única plataforma.</p>
+    </div>
+
+    <p class="auth-left__footer">© 2026 Deploy Manager. Todos os direitos reservados.</p>
+  </div>
+
+  <!-- Lado Direito -->
+  <div class="auth-right">
+
+    <div class="auth-tabs">
+      <button class="auth-tab" [class.active]="activeTab === 'login'" (click)="setTab('login')">Login</button>
+      <button class="auth-tab" [class.active]="activeTab === 'register'" (click)="setTab('register')">Cadastro</button>
+    </div>
+
+    @if (activeTab === 'login') {
+      <div class="auth-form">
+        <h2>Bem-vindo de volta</h2>
+        <p class="auth-form__subtitle">Entre com suas credenciais para acessar sua conta</p>
+
+        <div class="form-group">
+          <label>E-mail</label>
+          <input type="email" [(ngModel)]="loginData.email" placeholder="seu@email.com" />
+        </div>
+
+        <div class="form-group">
+          <label>Senha</label>
+          <input type="password" [(ngModel)]="loginData.password" placeholder="••••••••" />
+        </div>
+
+        @if (errorMessage) {
+          <p class="error-message">{{ errorMessage }}</p>
+        }
+
+        <button class="btn-primary" (click)="onLogin()" [disabled]="loading">
+          {{ loading ? 'Entrando...' : 'Entrar' }}
+        </button>
+
+        <p class="auth-form__link">
+          Não tem uma conta? <a (click)="setTab('register')">Cadastre-se</a>
+        </p>
+      </div>
+    }
+
+    @if (activeTab === 'register') {
+      <div class="auth-form">
+        <h2>Criar uma conta</h2>
+        <p class="auth-form__subtitle">Preencha os dados abaixo para começar</p>
+
+        <div class="form-group">
+          <label>E-mail</label>
+          <input type="email" [(ngModel)]="registerData.email" placeholder="seu@email.com" />
+        </div>
+
+        <div class="form-group">
+          <label>Senha</label>
+          <input type="password" [(ngModel)]="registerData.password" placeholder="••••••••" />
+        </div>
+
+        <div class="form-group">
+          <label>Confirmar senha</label>
+          <input type="password" [(ngModel)]="registerData.confirmPassword" placeholder="••••••••" />
+        </div>
+
+        @if (errorMessage) {
+          <p class="error-message">{{ errorMessage }}</p>
+        }
+
+        <button class="btn-primary" (click)="onRegister()" [disabled]="loading">
+          {{ loading ? 'Criando...' : 'Criar conta' }}
+        </button>
+
+        <p class="auth-form__link">
+          Já tem uma conta? <a (click)="setTab('login')">Faça login</a>
+        </p>
+      </div>
+    }
+
+  </div>
+</div>

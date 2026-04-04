@@ -1,0 +1,89 @@
+<div class="page">
+  <div class="page-header">
+    <div>
+      <h1>Dashboard</h1>
+      <p class="page-subtitle">Visão geral do sistema de gerenciamento de deploys</p>
+    </div>
+  </div>
+
+  <!-- Cards de estatísticas -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-card__icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+          <polyline points="9 22 9 12 15 12 15 22"/>
+        </svg>
+      </div>
+      <div class="stat-card__info">
+        <span class="stat-card__label">Clientes Ativos</span>
+        <span class="stat-card__value">{{ totalClients }}</span>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-card__icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+        </svg>
+      </div>
+      <div class="stat-card__info">
+        <span class="stat-card__label">Versões Disponíveis</span>
+        <span class="stat-card__value">{{ totalVersions }}</span>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-card__icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+        </svg>
+      </div>
+      <div class="stat-card__info">
+        <span class="stat-card__label">Conexões Remotas</span>
+        <span class="stat-card__value">{{ totalConnections }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Listas recentes -->
+  <div class="dashboard-grid">
+    <div class="card">
+      <h2 class="card__title">Clientes Recentes</h2>
+      <div class="list">
+        @for (client of recentClients; track client.id) {
+          <div class="list-item">
+            <div class="list-item__info">
+              <span class="list-item__name">{{ client.name }}</span>
+              <span class="list-item__sub">{{ client.city }} - {{ client.state }}</span>
+            </div>
+            <span class="badge badge--version">v{{ client.actualVersion?.numberVersion }}</span>
+          </div>
+        } @empty {
+          <p class="empty-text">Nenhum cliente cadastrado.</p>
+        }
+      </div>
+    </div>
+
+    <div class="card">
+      <h2 class="card__title">Versões Recentes</h2>
+      <div class="list">
+        @for (version of recentVersions; track version.id) {
+          <div class="list-item">
+            <div class="list-item__info">
+              <span class="list-item__name">Versão {{ version.numberVersion }}</span>
+              <span class="list-item__sub">{{ version.dateRelease }}</span>
+            </div>
+            @if (version.activate) {
+              <span class="badge badge--active">Ativa</span>
+            } @else {
+              <span class="badge badge--inactive">Inativa</span>
+            }
+          </div>
+        } @empty {
+          <p class="empty-text">Nenhuma versão cadastrada.</p>
+        }
+      </div>
+    </div>
+  </div>
+</div>

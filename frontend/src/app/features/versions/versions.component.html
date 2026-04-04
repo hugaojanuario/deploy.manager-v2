@@ -1,0 +1,95 @@
+<div class="page">
+  <div class="page-header">
+    <div>
+      <h1>Versões</h1>
+      <p class="page-subtitle">Gerencie as versões do sistema e seus changelogs</p>
+    </div>
+    <button class="btn-primary" (click)="openCreateModal()">+ Nova Versão</button>
+  </div>
+
+  <div class="search-bar">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+    </svg>
+    <input type="text" [(ngModel)]="searchTerm" placeholder="Buscar versão..." />
+  </div>
+
+  @if (loading) {
+    <div class="loading">Carregando...</div>
+  } @else {
+    <div class="versions-list">
+      @for (version of filteredVersions; track version.id) {
+        <div class="version-item">
+          <div class="version-item__main">
+            <div class="version-item__title">
+              <span class="version-number">Versão {{ version.numberVersion }}</span>
+              @if (version.activate) {
+                <span class="badge badge--active">Ativa</span>
+              } @else {
+                <span class="badge badge--inactive">Inativa</span>
+              }
+            </div>
+            <div class="version-item__meta">
+              <span class="meta-item">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/>
+                  <line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+                </svg>
+                {{ version.dateRelease }}
+              </span>
+            </div>
+            <p class="version-item__changelog">{{ version.changelog }}</p>
+          </div>
+          <div class="version-item__actions">
+            <button class="icon-btn" (click)="openEditModal(version)" title="Editar">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+              </svg>
+            </button>
+            <button class="icon-btn icon-btn--danger" (click)="delete(version.id)" title="Excluir">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+                <path d="M10 11v6"/><path d="M14 11v6"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+      } @empty {
+        <p class="empty-text">Nenhuma versão cadastrada.</p>
+      }
+    </div>
+  }
+</div>
+
+<!-- Modal -->
+@if (showModal) {
+  <div class="modal-overlay" (click)="closeModal()">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <div class="modal__header">
+        <h2>{{ isEditing ? 'Editar Versão' : 'Nova Versão' }}</h2>
+        <button class="modal__close" (click)="closeModal()">✕</button>
+      </div>
+
+      <div class="modal__body">
+        <div class="form-group">
+          <label>Número da Versão</label>
+          <input type="text" [(ngModel)]="form.numberVersion" placeholder="Ex: 2.5.1" />
+        </div>
+        <div class="form-group">
+          <label>Data de Release</label>
+          <input type="date" [(ngModel)]="form.dateRelease" />
+        </div>
+        <div class="form-group">
+          <label>Changelog</label>
+          <textarea [(ngModel)]="form.changelog" placeholder="Descreva as mudanças desta versão..." rows="4"></textarea>
+        </div>
+      </div>
+
+      <div class="modal__footer">
+        <button class="btn-secondary" (click)="closeModal()">Cancelar</button>
+        <button class="btn-primary" (click)="save()">{{ isEditing ? 'Salvar' : 'Criar' }}</button>
+      </div>
+    </div>
+  </div>
+}

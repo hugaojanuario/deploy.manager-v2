@@ -1,0 +1,236 @@
+.page {
+  padding: 40px;
+
+  &-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 24px;
+
+    h1 { font-size: 26px; font-weight: 700; }
+  }
+
+  &-subtitle { color: var(--color-text-muted); font-size: 14px; margin-top: 4px; }
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 10px 16px;
+  margin-bottom: 24px;
+  color: var(--color-text-muted);
+
+  input {
+    border: none;
+    outline: none;
+    flex: 1;
+    font-size: 14px;
+    font-family: inherit;
+    color: var(--color-text);
+    background: transparent;
+
+    &::placeholder { color: var(--color-text-muted); }
+  }
+}
+
+.versions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.version-item {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--color-border);
+
+  &:last-child { border-bottom: none; }
+
+  &__main { flex: 1; }
+
+  &__title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 6px;
+  }
+
+  &__meta {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 8px;
+  }
+
+  &__changelog {
+    font-size: 13px;
+    color: var(--color-text-muted);
+    line-height: 1.5;
+  }
+
+  &__actions {
+    display: flex;
+    gap: 4px;
+    flex-shrink: 0;
+    margin-left: 16px;
+  }
+}
+
+.version-number {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  color: var(--color-text-muted);
+}
+
+.badge {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 4px;
+
+  &--active { background: #dcfce7; color: #16a34a; }
+  &--inactive { background: #f5f5f5; color: var(--color-text-muted); }
+}
+
+.icon-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 5px;
+  color: var(--color-text-muted);
+  display: flex;
+  align-items: center;
+
+  &:hover { background: #f5f5f5; color: var(--color-text); }
+  &--danger:hover { background: #fef2f2; color: var(--color-danger); }
+}
+
+.btn-primary {
+  padding: 10px 18px;
+  background: var(--color-primary);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.2s;
+
+  &:hover { background: var(--color-primary-hover); }
+}
+
+.btn-secondary {
+  padding: 10px 18px;
+  background: white;
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: inherit;
+
+  &:hover { background: #f5f5f5; }
+}
+
+.loading, .empty-text {
+  text-align: center;
+  color: var(--color-text-muted);
+  padding: 40px;
+  font-size: 14px;
+}
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.modal {
+  background: white;
+  border-radius: 12px;
+  width: 480px;
+  max-width: 95vw;
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--color-border);
+
+    h2 { font-size: 17px; font-weight: 600; }
+  }
+
+  &__close {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    color: var(--color-text-muted);
+    padding: 4px 8px;
+    border-radius: 4px;
+
+    &:hover { background: #f5f5f5; }
+  }
+
+  &__body {
+    padding: 24px;
+  }
+
+  &__footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    padding: 16px 24px;
+    border-top: 1px solid var(--color-border);
+  }
+}
+
+.form-group {
+  margin-bottom: 16px;
+
+  label {
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 6px;
+  }
+
+  input, textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    font-size: 14px;
+    font-family: inherit;
+    background: #f9f9f9;
+    outline: none;
+    transition: border-color 0.2s;
+    resize: vertical;
+
+    &:focus { border-color: var(--color-primary); background: white; }
+  }
+}

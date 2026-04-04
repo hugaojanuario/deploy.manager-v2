@@ -1,0 +1,120 @@
+<div class="page">
+  <div class="page-header">
+    <div>
+      <h1>Clientes</h1>
+      <p class="page-subtitle">Gerencie os cartórios e serventias cadastrados</p>
+    </div>
+    <button class="btn-primary" (click)="openCreateModal()">+ Novo Cliente</button>
+  </div>
+
+  <div class="search-bar">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+    </svg>
+    <input type="text" [(ngModel)]="searchTerm" placeholder="Buscar por nome, cidade ou estado..." />
+  </div>
+
+  @if (loading) {
+    <div class="loading">Carregando...</div>
+  } @else {
+    <div class="cards-grid">
+      @for (client of filteredClients; track client.id) {
+        <div class="client-card">
+          <div class="client-card__header">
+            <div class="client-card__icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+              </svg>
+            </div>
+            <div class="client-card__actions">
+              <button class="icon-btn" (click)="openEditModal(client)" title="Editar">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                  <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                </svg>
+              </button>
+              <button class="icon-btn icon-btn--danger" (click)="delete(client.id)" title="Excluir">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+                  <path d="M10 11v6"/><path d="M14 11v6"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <h3 class="client-card__name">{{ client.name }}</h3>
+
+          <div class="client-card__details">
+            <span class="detail">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
+              </svg>
+              {{ client.city }} - {{ client.state }}
+            </span>
+            <span class="detail">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+              </svg>
+              Versão {{ client.actualVersion?.numberVersion }}
+            </span>
+          </div>
+
+          @if (client.activate) {
+            <span class="status status--active">Ativo</span>
+          } @else {
+            <span class="status status--inactive">Inativo</span>
+          }
+        </div>
+      } @empty {
+        <p class="empty-text">Nenhum cliente encontrado.</p>
+      }
+    </div>
+  }
+</div>
+
+<!-- Modal -->
+@if (showModal) {
+  <div class="modal-overlay" (click)="closeModal()">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <div class="modal__header">
+        <h2>{{ isEditing ? 'Editar Cliente' : 'Novo Cliente' }}</h2>
+        <button class="modal__close" (click)="closeModal()">✕</button>
+      </div>
+
+      <div class="modal__body">
+        <div class="form-group">
+          <label>Nome</label>
+          <input type="text" [(ngModel)]="form.name" placeholder="Nome do cliente" />
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Cidade</label>
+            <input type="text" [(ngModel)]="form.city" placeholder="Cidade" />
+          </div>
+          <div class="form-group">
+            <label>Estado</label>
+            <input type="text" [(ngModel)]="form.state" placeholder="UF" maxlength="2" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Contato</label>
+          <input type="text" [(ngModel)]="form.contact" placeholder="Telefone ou e-mail" />
+        </div>
+        <div class="form-group">
+          <label>Versão</label>
+          <select [(ngModel)]="form.versionId">
+            <option value="">Selecione uma versão</option>
+            @for (version of versions; track version.id) {
+              <option [value]="version.id">{{ version.numberVersion }}</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <div class="modal__footer">
+        <button class="btn-secondary" (click)="closeModal()">Cancelar</button>
+        <button class="btn-primary" (click)="save()">{{ isEditing ? 'Salvar' : 'Criar' }}</button>
+      </div>
+    </div>
+  </div>
+}
