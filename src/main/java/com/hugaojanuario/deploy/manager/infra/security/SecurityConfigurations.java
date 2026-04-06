@@ -64,8 +64,6 @@ public class SecurityConfigurations {
                         .requestMatchers(HttpMethod.DELETE, "/deploy/connection/{id}").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/deploy/client/{id}").hasRole("ADMIN")
 
-                        .requestMatchers(HttpMethod.GET, "/deploy/client/**").permitAll()
-
                         .anyRequest().authenticated())
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();

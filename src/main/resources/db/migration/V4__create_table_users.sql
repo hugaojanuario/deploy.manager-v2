@@ -13,7 +13,7 @@ INSERT INTO public.users (id, email, password, user_type, created_at, activate)
 VALUES (
            gen_random_uuid(),
            'admin@siplan.com.br',
-           '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lHuu',
+           '$2a$12$G90LY/739Fj0sxxyFMWObOHELNXXfTFnj3WxH5UPmOPngVi/nKOci',
            'ADMIN',
            CURRENT_TIMESTAMP,
            true
@@ -23,7 +23,7 @@ INSERT INTO public.users (id, email, password, user_type, created_at, activate)
 VALUES (
            gen_random_uuid(),
            'user@siplan.com.br',
-           '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lHuu',
+           '$2a$12$G90LY/739Fj0sxxyFMWObOHELNXXfTFnj3WxH5UPmOPngVi/nKOci',
            'USER',
            CURRENT_TIMESTAMP,
            true
