@@ -2,8 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ClientService } from '../../core/services/client.service';
 import { VersionService } from '../../core/services/version.service';
+import { ConnectionService } from '../../core/services/connection.service';
 import { Client, CreateClientRequest, UpdateClientRequest } from '../../core/models/client.model';
 import { Version } from '../../core/models/version.model';
+import { Connection, ConnectionType } from '../../core/models/connection.model';
 
 @Component({
   selector: 'app-clients',
@@ -18,15 +20,23 @@ export class ClientsComponent implements OnInit {
   searchTerm = '';
   loading = false;
 
+  // Modal criar/editar
   showModal = false;
   isEditing = false;
   selectedId = '';
-
   form: CreateClientRequest = { name: '', city: '', state: '', contact: '', versionId: '' };
+
+  // Modal detalhes
+  showDetailsModal = false;
+  selectedClient: Client | null = null;
+  clientConnections: Connection[] = [];
+  loadingConnections = false;
+  visiblePasswords: Set<string> = new Set();
 
   constructor(
     private clientService: ClientService,
-    private versionService: VersionService
+    private versionService: VersionService,
+    private connectionService: ConnectionService
   ) {}
 
   ngOnInit() {
@@ -36,7 +46,7 @@ export class ClientsComponent implements OnInit {
 
   loadClients() {
     this.loading = true;
-    this.clientService.findAll(0, 50).subscribe({
+    this.clientService.findAll(0, 100).subscribe({
       next: (page) => { this.clients = page.content; this.loading = false; },
       error: () => { this.loading = false; }
     });
@@ -52,19 +62,73 @@ export class ClientsComponent implements OnInit {
     if (!this.searchTerm) return this.clients;
     const term = this.searchTerm.toLowerCase();
     return this.clients.filter(c =>
-      c.name.toLowerCase().includes(term) ||
-      c.city.toLowerCase().includes(term) ||
-      c.state.toLowerCase().includes(term)
+      c.name?.toLowerCase().includes(term) ||
+      c.city?.toLowerCase().includes(term) ||
+      c.state?.toLowerCase().includes(term)
     );
   }
 
+  // ── Modal detalhes ──────────────────────────────────────────
+  openDetailsModal(client: Client) {
+    this.selectedClient = client;
+    this.showDetailsModal = true;
+    this.clientConnections = [];
+    this.visiblePasswords.clear();
+    this.loadingConnections = true;
+    this.connectionService.findByClientId(client.id).subscribe({
+      next: (conns) => { this.clientConnections = conns; this.loadingConnections = false; },
+      error: () => { this.loadingConnections = false; }
+    });
+  }
+
+  closeDetailsModal() {
+    this.showDetailsModal = false;
+    this.selectedClient = null;
+    this.clientConnections = [];
+    this.visiblePasswords.clear();
+  }
+
+  togglePassword(key: string) {
+    if (this.visiblePasswords.has(key)) {
+      this.visiblePasswords.delete(key);
+    } else {
+      this.visiblePasswords.add(key);
+    }
+  }
+
+  isPasswordVisible(key: string): boolean {
+    return this.visiblePasswords.has(key);
+  }
+
+  getConnectionBadgeClass(type: ConnectionType): string {
+    const map: Record<ConnectionType, string> = {
+      TEAMVIEWER: 'badge--teamviewer',
+      ANYDESK: 'badge--anydesk',
+      ANYVIEWER: 'badge--anyviewer',
+      HOPTODESK: 'badge--hoptodesk'
+    };
+    return map[type] ?? '';
+  }
+
+  getConnectionLabel(type: ConnectionType): string {
+    const map: Record<ConnectionType, string> = {
+      TEAMVIEWER: 'TeamViewer',
+      ANYDESK: 'AnyDesk',
+      ANYVIEWER: 'AnyViewer',
+      HOPTODESK: 'HopToDesk'
+    };
+    return map[type] ?? type;
+  }
+
+  // ── Modal criar/editar ──────────────────────────────────────
   openCreateModal() {
     this.isEditing = false;
     this.form = { name: '', city: '', state: '', contact: '', versionId: '' };
     this.showModal = true;
   }
 
-  openEditModal(client: Client) {
+  openEditModal(client: Client, event: Event) {
+    event.stopPropagation();
     this.isEditing = true;
     this.selectedId = client.id;
     this.form = {
@@ -93,7 +157,8 @@ export class ClientsComponent implements OnInit {
     }
   }
 
-  delete(id: string) {
+  delete(id: string, event: Event) {
+    event.stopPropagation();
     if (confirm('Deseja desativar este cliente?')) {
       this.clientService.delete(id).subscribe({
         next: () => { this.loadClients(); }

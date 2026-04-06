@@ -1,6 +1,6 @@
 import { Client } from './client.model'
 
-export type ConnectionType = 'TEAMVIEWER' | 'ANYDESK' | 'ANYVIEWER';
+export type ConnectionType = 'TEAMVIEWER' | 'ANYDESK' | 'ANYVIEWER' | 'HOPTODESK';
 
 export interface Connection{
   id: string;

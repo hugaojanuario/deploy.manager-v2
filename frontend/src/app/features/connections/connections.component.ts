@@ -128,7 +128,8 @@ export class ConnectionsComponent implements OnInit {
     const map: Record<ConnectionType, string> = {
       TEAMVIEWER: 'badge--teamviewer',
       ANYDESK: 'badge--anydesk',
-      ANYVIEWER: 'badge--anyviewer'
+      ANYVIEWER: 'badge--anyviewer',
+      HOPTODESK: 'badge--hoptodesk'
     };
     return map[type];
   }

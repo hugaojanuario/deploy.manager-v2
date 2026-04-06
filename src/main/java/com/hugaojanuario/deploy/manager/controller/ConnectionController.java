@@ -41,6 +41,11 @@ public class ConnectionController {
         return ResponseEntity.ok(findByid);
     }
 
+    @GetMapping("/client/{clientId}")
+    public ResponseEntity findConnectionsByClientId(@PathVariable UUID clientId) {
+        return ResponseEntity.ok(connectionService.findConnectionsByClientId(clientId));
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity updateConnection(@PathVariable UUID id, @RequestBody UpdateConnectionRequest request){
         var updated = connectionService.updateConnection(id, request);

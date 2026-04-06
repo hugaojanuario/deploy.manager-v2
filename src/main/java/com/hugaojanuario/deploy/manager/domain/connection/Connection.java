@@ -34,6 +34,7 @@ public class Connection {
     private String passwordDb;
     private String idRemoteConnection;
     private String passwordRemoteConnection;
+    @Enumerated(EnumType.STRING)
     private ConnectionType connectionType;
 
     @CreationTimestamp

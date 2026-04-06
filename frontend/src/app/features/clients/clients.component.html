@@ -19,7 +19,7 @@
   } @else {
     <div class="cards-grid">
       @for (client of filteredClients; track client.id) {
-        <div class="client-card">
+        <div class="client-card" (click)="openDetailsModal(client)">
           <div class="client-card__header">
             <div class="client-card__icon">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -27,13 +27,13 @@
               </svg>
             </div>
             <div class="client-card__actions">
-              <button class="icon-btn" (click)="openEditModal(client)" title="Editar">
+              <button class="icon-btn" (click)="openEditModal(client, $event)" title="Editar">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
                   <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
                 </svg>
               </button>
-              <button class="icon-btn icon-btn--danger" (click)="delete(client.id)" title="Excluir">
+              <button class="icon-btn icon-btn--danger" (click)="delete(client.id, $event)" title="Excluir">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
                   <path d="M10 11v6"/><path d="M14 11v6"/>
@@ -72,7 +72,7 @@
   }
 </div>
 
-<!-- Modal -->
+<!-- Modal criar/editar -->
 @if (showModal) {
   <div class="modal-overlay" (click)="closeModal()">
     <div class="modal" (click)="$event.stopPropagation()">
@@ -114,6 +114,171 @@
       <div class="modal__footer">
         <button class="btn-secondary" (click)="closeModal()">Cancelar</button>
         <button class="btn-primary" (click)="save()">{{ isEditing ? 'Salvar' : 'Criar' }}</button>
+      </div>
+    </div>
+  </div>
+}
+
+<!-- Modal detalhes do cliente -->
+@if (showDetailsModal && selectedClient) {
+  <div class="modal-overlay" (click)="closeDetailsModal()">
+    <div class="modal modal--details" (click)="$event.stopPropagation()">
+      <div class="modal__header">
+        <div class="details-header">
+          <h2>{{ selectedClient.name }}</h2>
+          @if (selectedClient.activate) {
+            <span class="status status--active">Ativo</span>
+          } @else {
+            <span class="status status--inactive">Inativo</span>
+          }
+        </div>
+        <button class="modal__close" (click)="closeDetailsModal()">✕</button>
+      </div>
+
+      <div class="modal__body modal__body--details">
+
+        <!-- Informações do cliente -->
+        <div class="details-section">
+          <h3 class="details-section__title">Informações</h3>
+          <div class="details-info-grid">
+            <div class="info-item">
+              <span class="info-item__label">Cidade</span>
+              <span class="info-item__value">{{ selectedClient.city }}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-item__label">Estado</span>
+              <span class="info-item__value">{{ selectedClient.state }}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-item__label">Contato</span>
+              <span class="info-item__value">{{ selectedClient.contact || '—' }}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-item__label">Versão atual</span>
+              <span class="info-item__value version-badge">{{ selectedClient.actualVersion?.numberVersion || '—' }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Conexões -->
+        <div class="details-section">
+          <h3 class="details-section__title">Conexões</h3>
+
+          @if (loadingConnections) {
+            <p class="loading-inline">Carregando conexões...</p>
+          } @else if (clientConnections.length === 0) {
+            <p class="empty-inline">Nenhuma conexão cadastrada.</p>
+          } @else {
+            <div class="connections-list">
+              @for (conn of clientConnections; track conn.id) {
+                <div class="connection-card">
+                  <div class="connection-card__header">
+                    <span class="badge {{ getConnectionBadgeClass(conn.connectionType) }}">
+                      {{ getConnectionLabel(conn.connectionType) }}
+                    </span>
+                  </div>
+
+                  <div class="connection-fields">
+
+                    <div class="conn-field">
+                      <span class="conn-field__label">ID Acesso Remoto</span>
+                      <span class="conn-field__value">{{ conn.idRemoteConnection || '—' }}</span>
+                    </div>
+
+                    <div class="conn-field">
+                      <span class="conn-field__label">Senha Acesso Remoto</span>
+                      <div class="password-field">
+                        <span class="conn-field__value">
+                          {{ isPasswordVisible('remote-' + conn.id) ? conn.passwordRemoteConnection : '••••••••' }}
+                        </span>
+                        <button class="eye-btn" (click)="togglePassword('remote-' + conn.id)" title="Mostrar/ocultar">
+                          @if (isPasswordVisible('remote-' + conn.id)) {
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                              <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/>
+                              <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/>
+                              <line x1="1" y1="1" x2="23" y2="23"/>
+                            </svg>
+                          } @else {
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                              <circle cx="12" cy="12" r="3"/>
+                            </svg>
+                          }
+                        </button>
+                      </div>
+                    </div>
+
+                    @if (conn.userMachine) {
+                      <div class="conn-field">
+                        <span class="conn-field__label">Usuário Windows</span>
+                        <span class="conn-field__value">{{ conn.userMachine }}</span>
+                      </div>
+                    }
+
+                    @if (conn.passwordMachine) {
+                      <div class="conn-field">
+                        <span class="conn-field__label">Senha Windows</span>
+                        <div class="password-field">
+                          <span class="conn-field__value">
+                            {{ isPasswordVisible('machine-' + conn.id) ? conn.passwordMachine : '••••••••' }}
+                          </span>
+                          <button class="eye-btn" (click)="togglePassword('machine-' + conn.id)" title="Mostrar/ocultar">
+                            @if (isPasswordVisible('machine-' + conn.id)) {
+                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/>
+                                <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/>
+                                <line x1="1" y1="1" x2="23" y2="23"/>
+                              </svg>
+                            } @else {
+                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                <circle cx="12" cy="12" r="3"/>
+                              </svg>
+                            }
+                          </button>
+                        </div>
+                      </div>
+                    }
+
+                    @if (conn.userDb) {
+                      <div class="conn-field">
+                        <span class="conn-field__label">Usuário DB</span>
+                        <span class="conn-field__value">{{ conn.userDb }}</span>
+                      </div>
+                    }
+
+                    @if (conn.passwordDb) {
+                      <div class="conn-field">
+                        <span class="conn-field__label">Senha DB</span>
+                        <div class="password-field">
+                          <span class="conn-field__value">
+                            {{ isPasswordVisible('db-' + conn.id) ? conn.passwordDb : '••••••••' }}
+                          </span>
+                          <button class="eye-btn" (click)="togglePassword('db-' + conn.id)" title="Mostrar/ocultar">
+                            @if (isPasswordVisible('db-' + conn.id)) {
+                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/>
+                                <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/>
+                                <line x1="1" y1="1" x2="23" y2="23"/>
+                              </svg>
+                            } @else {
+                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                <circle cx="12" cy="12" r="3"/>
+                              </svg>
+                            }
+                          </button>
+                        </div>
+                      </div>
+                    }
+
+                  </div>
+                </div>
+              }
+            </div>
+          }
+        </div>
+
       </div>
     </div>
   </div>

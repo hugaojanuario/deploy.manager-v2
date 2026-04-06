@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -83,6 +84,13 @@ public class ConnectionService {
         Connection updated = connectionRepository.save(connection);
 
         return new ConnectionResponse(updated);
+    }
+
+    public List<ConnectionResponse> findConnectionsByClientId(UUID clientId) {
+        return connectionRepository.findByClientIdAndActivateTrue(clientId)
+                .stream()
+                .map(ConnectionResponse::new)
+                .toList();
     }
 
     public void softDeleteConnection(UUID id){

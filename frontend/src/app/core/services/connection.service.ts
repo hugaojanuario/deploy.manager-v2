@@ -18,6 +18,10 @@ export class ConnectionService {
     return this.http.get<Connection>(`${API_URL}/${id}`);
   }
 
+  findByClientId(clientId: string): Observable<Connection[]> {
+    return this.http.get<Connection[]>(`${API_URL}/client/${clientId}`);
+  }
+
   create(request: CreateConnectionRequest): Observable<Connection> {
     return this.http.post<Connection>(API_URL, request);
   }
