@@ -8,3 +8,23 @@ CREATE TABLE users (
                        created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
                        activate BOOLEAN DEFAULT true
 );
+
+INSERT INTO public.users (id, email, password, user_type, created_at, activate)
+VALUES (
+           gen_random_uuid(),
+           'admin@siplan.com.br',
+           '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lHuu',
+           'ADMIN',
+           CURRENT_TIMESTAMP,
+           true
+       );
+
+INSERT INTO public.users (id, email, password, user_type, created_at, activate)
+VALUES (
+           gen_random_uuid(),
+           'user@siplan.com.br',
+           '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lHuu',
+           'USER',
+           CURRENT_TIMESTAMP,
+           true
+       );
